@@ -1,0 +1,12 @@
+{
+  "name": "Github Pull Request Notifier",
+  "version": "1.0",
+  "description": "Polls the github API and notifies you when repos that you specify have a pending pull request.",
+  "browser_action": {
+    "default_icon": "icon.png",
+    "popup": "popup.html"
+  },
+  "permissions": [
+    "https://github.com/"
+  ]
+}
