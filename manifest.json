@@ -2,9 +2,12 @@
   "name": "Github Pull Request Notifier",
   "version": "1.0",
   "description": "Polls the github API and notifies you when repos that you specify have a pending pull request.",
+	"icons": { "16": "icon16.png",
+           "48": "icon48.png",
+          "128": "icon128.png" },
   "background_page": "background.html",
   "browser_action": {
-    "default_icon": "icon.png",
+    "default_icon": "icon19.png",
     "popup": "popup.html"
   },
   "permissions": [
