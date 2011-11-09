@@ -35,10 +35,15 @@
 		requestHtml = "";
 
 		for (i in pullRequests) {
-			requestHtml += "<a href='" + pullRequests[i].url + "'>" + pullRequests[i].title + "</a>";
+			requestHtml += "<a href='" + pullRequests[i].html_url + "'>" + pullRequests[i].title + "</a>";
 			requestHtml += "</br>";
 		}
 		$("#pullRequestsDiv").html(requestHtml);
+		$("a").click(function(e) {
+			console.log(e.target.href);
+			chrome.tabs.create({'url': e.target.href}, function(tab) {
+    			});
+		});
 	}
 
 </script>
