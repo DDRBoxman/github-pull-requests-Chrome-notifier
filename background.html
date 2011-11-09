@@ -1,0 +1,35 @@
+<html>
+<head>
+<script type="text/javascript" src="jquery-1.7.min.js"></script> 
+<script type="text/javascript" src="base64.js"></script> 
+<script>
+
+
+	var GITAPIROOT = 'https://api.github.com';
+
+	//localStorage.setItem("username", "");
+	//localStorage.setItem("password", "");
+
+	// Called when the user clicks on the browser action.
+	chrome.browserAction.onClicked.addListener(function(tab) {
+		chrome.tabs.executeScript(null, {code:"document.body.style.background='red !important'"});
+	});
+
+	chrome.browserAction.setBadgeBackgroundColor({color:[0, 0, 255, 100]});
+
+	/*var i = 0;
+	window.setInterval(function() {
+		chrome.browserAction.setBadgeText({text:localStorage.getItem("username")});
+		i++;
+	}, 1000 * 60);*/
+
+	$.ajax({
+		url: GITAPIROOT + '/repos/Uncodin/nowtu-android/pulls',
+		success: function(res){
+			chrome.browserAction.setBadgeText({text:String(res.length)});
+		},
+		beforeSend: function (xhr) { xhr.setRequestHeader ("Authorization", "Basic " + Base64.encode(localStorage.getItem('username') + ":" + localStorage.getItem('password'))); }
+	});
+</script>
+</head>
+</html>
