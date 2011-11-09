@@ -2,6 +2,7 @@
 <head>
 <script type="text/javascript" src="jquery-1.7.min.js"></script> 
 <script type="text/javascript" src="base64.js"></script> 
+<script type="text/javascript" src="common.js"></script> 
 <script>
 
 	var GITAPIROOT = 'https://api.github.com';
@@ -9,21 +10,20 @@
 	//localStorage.setItem("username", "");
 	//localStorage.setItem("password", "");
 
-	chrome.browserAction.setBadgeBackgroundColor({color:[0, 0, 255, 100]});
-
 	checkPulls();
 
 	function checkPulls() {
-		$.ajax({
-			url: GITAPIROOT + '/repos/Uncodin/nowtu-android/pulls',
-			success: function(res){
+		if (localStorage.getItem("username") === null || localStorage.getItem("password") === null) {
+			chrome.browserAction.setBadgeBackgroundColor({color:[255, 0, 0, 100]});
+			chrome.browserAction.setBadgeText({text:'!'});
+		}
+		else {
+			chrome.browserAction.setBadgeBackgroundColor({color:[0, 0, 255, 100]});
+			
+			fetchPullRequests(function(res) {
 				chrome.browserAction.setBadgeText({text:String(res.length)});
-			},
-			beforeSend: function (xhr) {
-				xhr.setRequestHeader ("Authorization", 
-				"Basic " + Base64.encode(localStorage.getItem('username') + ":" + localStorage.getItem('password')));
-			}
-		});
+			});
+		}
 		var t=setTimeout("checkPulls()", 1000 * 60 * 5);
 	}
 

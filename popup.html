@@ -1,0 +1,60 @@
+<html>
+<head>
+<LINK REL=StyleSheet HREF="style.css" TYPE="text/css">
+<script type="text/javascript" src="jquery-1.7.min.js"></script> 
+<script type="text/javascript" src="base64.js"></script> 
+<script type="text/javascript" src="common.js"></script>
+<script>
+	$(document).ready(function() {
+		if (localStorage.getItem("username") === null || localStorage.getItem("password") === null) {
+			$("#loginDiv").show();
+			$("#pullRequestsDiv").hide();
+		}
+		else {
+			$("#loginDiv").hide();
+			$("#pullRequestsDiv").show();
+			showPullRequests();
+		}
+
+		$("#submit").click(function() {
+			$("#loginDiv").hide();
+			$("#pullRequestsDiv").show();
+
+			localStorage.setItem("username", $("#username").val());
+			localStorage.setItem("password", $("#password").val());
+
+			fetchPullRequests(function(res) {
+				showPullRequests();
+			});
+		});
+	});
+
+	function showPullRequests() {
+		pullRequests = JSON.parse(localStorage.getItem("pullRequests"));
+
+		requestHtml = "";
+
+		for (i in pullRequests) {
+			requestHtml += "<a href='" + pullRequests[i].url + "'>" + pullRequests[i].title + "</a>";
+			requestHtml += "</br>";
+		}
+		$("#pullRequestsDiv").html(requestHtml);
+	}
+
+</script>
+</head>
+<body>
+
+	<div id="loginDiv">
+		<label for="username">Username</label>
+		<input type="text" id="username"/>
+		<label for="password">Password</label>
+		<input type="password" id="password"/>
+		<input type="submit" id="submit"/>
+	</div>
+
+	<div id="pullRequestsDiv">
+
+	</div>
+</body>
+</html>
