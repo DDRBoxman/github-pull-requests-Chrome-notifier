@@ -21,7 +21,7 @@
 		if (provider.get('accessToken')) {
 			chrome.browserAction.setBadgeBackgroundColor({color:[0, 0, 255, 100]});
 			
-			accessToken = localStorage.getItem("accesstoken");
+			accessToken = provider.get('accessToken');
 			fetchPullRequests(accessToken, function(res) {
 				chrome.browserAction.setBadgeText({text:String(res.length)});
 			});
