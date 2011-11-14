@@ -1,15 +1,11 @@
 var GITAPIROOT = "https://api.github.com";
 
-function fetchPullRequests(callback) {
+function fetchPullRequests(accesstoken, callback) {
 	$.ajax({
-		url: GITAPIROOT + '/repos/Uncodin/nowtu-android/pulls',
+		url: GITAPIROOT + '/repos/Uncodin/nowtu-android/pulls' + '?access_token=' + accessToken,
 		success: function(res){
 			localStorage.setItem("pullRequests", JSON.stringify(res));
 			callback(res);
-		},
-		beforeSend: function (xhr) {
-			xhr.setRequestHeader ("Authorization", 
-			"Basic " + Base64.encode(localStorage.getItem('username') + ":" + localStorage.getItem('password')));
 		}
 	});
 }

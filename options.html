@@ -77,7 +77,7 @@ limitations under the License.
       var button = document.querySelector('#' + 'github');
       if (provider.get('accessToken')) {
  
-      	
+      	localStorage.setItem('accesstoken', provider.get('accessToken'));
       	accessToken = provider.get('accessToken');
       	
       	fetchUserRepos(accessToken, function (res) {

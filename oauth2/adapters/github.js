@@ -4,7 +4,7 @@ OAuth2.adapter('github', {
    */
   authorizationCodeURL: function(config) {
     return 'https://github.com/login/oauth/authorize?\
-client_id={{CLIENT_ID}}&redirect_uri={{REDIRECT_URI}}'
+client_id={{CLIENT_ID}}&redirect_uri={{REDIRECT_URI}}&scope=repo'
         .replace('{{CLIENT_ID}}', config.clientId)
         .replace('{{REDIRECT_URI}}', this.redirectURL(config));
   },
