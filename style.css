@@ -1,3 +1,11 @@
 #pullRequestsDiv {
 	width:500px;
 }
+
+.repoSection {
+	
+	border-color: #d9d9da;
+	border-style: solid;
+	border-width: 1px;
+	
+}

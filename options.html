@@ -1,0 +1,115 @@
+<!doctype html>
+
+<!--
+Copyright 2011 Google Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<head>
+  <title>OAuth 2.0 Options</title>
+  <LINK REL=StyleSheet HREF="style.css" TYPE="text/css">
+  <script src="oauth2/oauth2.js"></script>
+  <script type="text/javascript" src="jquery-1.7.min.js"></script> 
+	<script type="text/javascript" src="common.js"></script>
+  <style>
+    h1 { font-size: 20px }
+    button.authorized { background: green }
+  </style>
+</head>
+
+<body>
+  <h1>OAuth 2.0 Permissions</h1>
+  <button id="github" onclick="javascript:authorize('github')">
+    Grant Github Access
+  </button>
+  <button id="clear" onclick="javascript:clearAuthorized()">Clear Tokens</button>
+  
+  <div class="repoSection">
+	  <div class="repoSectionTitle">
+	  </div>
+	  <div id="userRepoList">
+	  	
+	  </div>
+  </div>
+  
+  </br>
+  
+  <div class="repoSection">
+  <div id="userOrgs">
+  
+  </div>
+   </div>
+<script>
+
+  var github = new OAuth2('github', {
+    client_id: '0f27eed4ad57865f64ee',
+    client_secret: 'aae37febed42b7e254519e858703b4ed5b4d8a29',
+  });
+
+  function authorize(providerName) {
+    var provider = window[providerName];
+    provider.authorize(checkAuthorized);
+  }
+
+  function clearAuthorized() {
+    console.log('clear');
+    ['github'].forEach(function(providerName) {
+      var provider = window[providerName];
+      provider.clearAccessToken();
+    });
+    checkAuthorized();
+  }
+
+  function checkAuthorized() {
+    console.log('checkAuthorized');
+      var provider = window['github'];
+      var button = document.querySelector('#' + 'github');
+      if (provider.get('accessToken')) {
+ 
+      	
+      	accessToken = provider.get('accessToken');
+      	
+      	fetchUserRepos(accessToken, function (res) {
+      		html = "";
+      		for (i in res) {
+      			html += res[i].name + "</br>";
+      		}
+      		$('#userRepoList').html(html);
+      	});
+      	
+      	fetchUserOrgs(accessToken, function (res) {
+      		
+      		for (i in res) {
+      			console.log(res[i].login);
+      			fetchOrgRepos(accessToken, res[i].login, function(repos) {
+      				html = "";
+      				for (j in repos) {
+      					html += repos[j].name + "</br>";
+      				}
+      				$('#userOrgs').html(html);
+      			});
+      		}
+      	});
+      	
+      	
+      	
+        button.classList.add('authorized');
+      } else {
+        button.classList.remove('authorized');
+      }
+  }
+  checkAuthorized();
+</script>
+
+</body>

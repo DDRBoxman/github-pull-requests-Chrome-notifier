@@ -11,7 +11,15 @@
     "default_icon": "icon19.png",
     "popup": "popup.html"
   },
+"content_scripts": [
+    {
+      "matches": ["https://github.com/robots.txt*"],
+      "js": ["oauth2/oauth2_inject.js"],
+      "run_at": "document_start"
+    }
+  ],
   "permissions": [
-    "https://api.github.com/"
+    "https://api.github.com/",
+    "https://github.com/"
   ]
 }
