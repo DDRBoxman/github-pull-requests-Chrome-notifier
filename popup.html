@@ -3,35 +3,28 @@
 <LINK REL=StyleSheet HREF="style.css" TYPE="text/css">
 <script type="text/javascript" src="jquery-1.7.min.js"></script> 
 <script type="text/javascript" src="base64.js"></script> 
+<script src="oauth2/oauth2.js"></script>
 <script type="text/javascript" src="common.js"></script>
 <script>
 	$(document).ready(function() {
-		if (localStorage.getItem("accesstoken") === null) {
-			$("#pullRequestsDiv").hide();
-			var myid = chrome.i18n.getMessage("@@extension_id");
-			chrome.tabs.create({'url': 'chrome-extension://' + myid + '/options.html'}, function(tab) {});
-			window.close();
-		}
-		else {
+		
+		var provider = window['github'];
+		
+		if (provider.get('accessToken')) {
 			$("#pullRequestsDiv").show();
 			showPullRequests();
+		}
+		else {
+				$("#pullRequestsDiv").hide();
+				var myid = chrome.i18n.getMessage("@@extension_id");
+				chrome.tabs.create({'url': 'chrome-extension://' + myid + '/options.html'}, function(tab) {});
+				window.close();
+			
 		}
 	});
 
 	function showPullRequests() {
-		
-		requestHtml = "";
 
-		for (i in pullRequests) {
-			requestHtml += "<a href='" + pullRequests[i].html_url + "'>" + pullRequests[i].title + "</a>";
-			requestHtml += "</br>";
-		}
-		$("#pullRequestsDiv").html(requestHtml);
-		$("a").click(function(e) {
-			console.log(e.target.href);
-			chrome.tabs.create({'url': e.target.href}, function(tab) {
-    			});
-		});
 	}
 
 </script>

@@ -2,28 +2,33 @@
 <head>
 <script type="text/javascript" src="jquery-1.7.min.js"></script> 
 <script type="text/javascript" src="base64.js"></script> 
+<script src="oauth2/oauth2.js"></script>
 <script type="text/javascript" src="common.js"></script> 
 <script>
 
-	var GITAPIROOT = 'https://api.github.com';
-
-	//localStorage.setItem("username", "");
-	//localStorage.setItem("password", "");
+	chrome.extension.onRequest.addListener(
+	    function (request, sender, sendResponse){
+	        if(request.msg == "userAuthorized") checkPulls();
+	    }
+	);
 
 	checkPulls();
 
 	function checkPulls() {
-		if (localStorage.getItem("accesstoken") === null) {
-			chrome.browserAction.setBadgeBackgroundColor({color:[255, 0, 0, 100]});
-			chrome.browserAction.setBadgeText({text:'!'});
-		}
-		else {
+		
+		var provider = window['github'];
+		
+		if (provider.get('accessToken')) {
 			chrome.browserAction.setBadgeBackgroundColor({color:[0, 0, 255, 100]});
 			
 			accessToken = localStorage.getItem("accesstoken");
 			fetchPullRequests(accessToken, function(res) {
 				chrome.browserAction.setBadgeText({text:String(res.length)});
 			});
+		}
+		else {
+			chrome.browserAction.setBadgeBackgroundColor({color:[255, 0, 0, 100]});
+			chrome.browserAction.setBadgeText({text:'!'});
 		}
 		var t=setTimeout("checkPulls()", 1000 * 60 * 5);
 	}

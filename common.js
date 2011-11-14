@@ -1,5 +1,10 @@
 var GITAPIROOT = "https://api.github.com";
 
+var github = new OAuth2('github', {
+    client_id: '0f27eed4ad57865f64ee',
+    client_secret: 'aae37febed42b7e254519e858703b4ed5b4d8a29',
+  });
+
 function fetchPullRequests(accesstoken, callback) {
 	$.ajax({
 		url: GITAPIROOT + '/repos/Uncodin/nowtu-android/pulls' + '?access_token=' + accessToken,
