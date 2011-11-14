@@ -72,14 +72,14 @@ limitations under the License.
       var button = document.querySelector('#' + 'github');
       if (provider.get('accessToken')) {
  
-		sendRequest({ msg: "userAuthorized" });
+		chrome.extension.sendRequest({ msg: "userAuthorized" });
 
       	accessToken = provider.get('accessToken');
       	
       	fetchUserRepos(accessToken, function (res) {
       		html = "";
       		for (i in res) {
-      			html += res[i].name + "</br>";
+      			html += "<input type='checkbox'/>" + res[i].name + "</br>";
       		}
       		$('#userRepoList').html(html);
       	});
