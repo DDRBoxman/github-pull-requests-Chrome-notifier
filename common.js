@@ -36,9 +36,9 @@ function fetchUserOrgs(accessToken, callback) {
 
 function fetchOrgRepos(accesstoken, org, callback) {
 	$.ajax({
-		url: GITAPIROOT + '/orgs/' + org + '/repos' + '?access_token=' + accessToken,
-		success: function(res){
-			callback(res);
+		url: GITAPIROOT + '/orgs/' + org.login + '/repos' + '?access_token=' + accessToken,
+		success: function(org, res){
+			callback(org, res);
 		}
 	});
 }

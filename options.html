@@ -1,42 +1,33 @@
-<!doctype html>
-
-<!--
-Copyright 2011 Google Inc. All Rights Reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
-
 <head>
-  <title>OAuth 2.0 Options</title>
-  <LINK REL=StyleSheet HREF="style.css" TYPE="text/css">
-  <script src="oauth2/oauth2.js"></script>
-  <script type="text/javascript" src="jquery-1.7.min.js"></script> 
-	<script type="text/javascript" src="common.js"></script>
-  <style>
-    h1 { font-size: 20px }
-    button.authorized { background: green }
-  </style>
+<title>OAuth 2.0 Options</title>
+<LINK REL=StyleSheet HREF="style.css" TYPE="text/css">
+<script src="oauth2/oauth2.js"></script>
+<script type="text/javascript" src="jquery-1.7.min.js"></script> 
+<script src="persistence.js" type="application/javascript"></script>
+<script src="persistence.store.sql.js" type="application/javascript"></script>
+<script src="persistence.store.websql.js" type="application/javascript"></script>
+<script type="text/javascript" src="common.js"></script>
+<script type="text/javascript" src="common-db.js"></script>
+<style>
+	h1 { font-size: 20px }
+	button.authorized { background: green }
+</style>
 </head>
 
 <body>
+	
+	<h1>Preferences</h1>
+	<input type="checkbox" id="showOnlyOthersCheckbox"/><label for="showMine">Only show pull requests made by others.</label>
+	
   <h1>OAuth 2.0 Permissions</h1>
   <button id="github" onclick="javascript:authorize('github')">
     Grant Github Access
   </button>
   <button id="clear" onclick="javascript:clearAuthorized()">Clear Tokens</button>
-  
+
   <div class="repoSection">
 	  <div class="repoSectionTitle">
+			<h3>My Repos</h3>
 	  </div>
 	  <div id="userRepoList">
 	  	
@@ -52,60 +43,99 @@ limitations under the License.
    </div>
 <script>
 
-  function authorize(providerName) {
+/* Options Toggle */
+$("#showOnlyOthersCheckbox").change(function() {
+	localStorage.setItem('showOnlyOthers', $("#showOnlyOthersCheckbox").attr('checked'));
+});
+
+function loadSettings() {
+	$("#showOnlyOthersCheckbox").checked = localStorage.getItem('showOnlyOthers');
+}
+
+/* OAuth */
+
+function authorize(providerName) {
+  var provider = window[providerName];
+  provider.authorize(checkAuthorized);
+}
+
+function clearAuthorized() {
+  console.log('clear');
+  ['github'].forEach(function(providerName) {
     var provider = window[providerName];
-    provider.authorize(checkAuthorized);
-  }
+    provider.clearAccessToken();
+  });
+  checkAuthorized();
+}
 
-  function clearAuthorized() {
-    console.log('clear');
-    ['github'].forEach(function(providerName) {
-      var provider = window[providerName];
-      provider.clearAccessToken();
-    });
-    checkAuthorized();
-  }
+function checkAuthorized() {
+  console.log('checkAuthorized');
+    var provider = window['github'];
+    var button = document.querySelector('#' + 'github');
+    if (provider.get('accessToken')) {
 
-  function checkAuthorized() {
-    console.log('checkAuthorized');
-      var provider = window['github'];
-      var button = document.querySelector('#' + 'github');
-      if (provider.get('accessToken')) {
- 
 		chrome.extension.sendRequest({ msg: "userAuthorized" });
 
-      	accessToken = provider.get('accessToken');
-      	
-      	fetchUserRepos(accessToken, function (res) {
-      		html = "";
-      		for (i in res) {
-      			html += "<input type='checkbox'/>" + res[i].name + "</br>";
-      		}
-      		$('#userRepoList').html(html);
-      	});
-      	
-      	fetchUserOrgs(accessToken, function (res) {
-      		
-      		for (i in res) {
-      			console.log(res[i].login);
-      			fetchOrgRepos(accessToken, res[i].login, function(repos) {
-      				html = "";
-      				for (j in repos) {
-      					html += repos[j].name + "</br>";
-      				}
-      				$('#userOrgs').html(html);
-      			});
-      		}
-      	});
-      	
-      	
-      	
-        button.classList.add('authorized');
-      } else {
-        button.classList.remove('authorized');
-      }
-  }
-  checkAuthorized();
+    	accessToken = provider.get('accessToken');
+    	
+    	fetchUserRepos(accessToken, function (res) {
+			persistRepos(res);
+			displayRepos();
+    	});
+    	
+    	fetchUserOrgs(accessToken, function (res) {
+    		persistOrgs(res);
+    		setOrgRepos();
+    	});
+	
+      button.classList.add('authorized');
+    } else {
+      button.classList.remove('authorized');
+    }
+}
+
+function setOrgRepos(accessToken) {
+	var allOrgs = Organization.all().order("name", false);
+
+	allOrgs.list(null, function (results) {
+	    results.forEach(function (r) {
+			fetchOrgRepos(accessToken, r, function(org, repos) {
+				persistRepos(repos, org);
+				displayOrgs();
+			});
+	    });
+	});
+}
+
+function displayRepos() {
+	
+	var allRepos = Repository.all().order("name", true);
+
+	allRepos.list(null, function (results) {
+		html = "";
+	    results.forEach(function (r) {
+			html += "<input type='checkbox'/>" + r.name + "</br>";
+	    });
+		$('#userRepoList').html(html);
+	});
+}
+
+function displayOrgs() {
+	var allOrgs = Organization.all().order("login", true);
+
+	allOrgs.list(null, function (results) {
+		html = "";
+	    results.forEach(function (r) {
+			html += "<input type='checkbox'/>" + r.login + "</br>";
+	    });
+		$('#userOrgs').html(html);
+	});
+}
+
+loadSettings();
+checkAuthorized();
+displayRepos();
+displayOrgs();
 </script>
 
 </body>
