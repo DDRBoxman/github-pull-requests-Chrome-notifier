@@ -43,6 +43,8 @@
    </div>
 <script>
 
+var repolist;
+
 /* Options Toggle */
 $("#showOnlyOthersCheckbox").change(function() {
 	localStorage.setItem('showOnlyOthers', $("#showOnlyOthersCheckbox").attr('checked'));
@@ -112,11 +114,26 @@ function displayRepos() {
 	var allRepos = Repository.all().order("name", true);
 
 	allRepos.list(null, function (results) {
+		repolist = results;
 		html = "";
 	    results.forEach(function (r) {
-			html += "<input type='checkbox'/>" + r.name + "</br>";
+			html += "<input class='repoBox' type='checkbox' name='" + r.id + "'";
+			if (r.checkForUpdates) {
+				html += "checked";
+			}
+			html += "/>" + r.name + "</br>";
 	    });
 		$('#userRepoList').html(html);
+		
+		$(".repoBox").change(function(e) {
+			console.log(e.target.name + " - " + e.target.checked);
+			repolist.forEach(function (r) {
+				if (r.id == e.target.name) {
+					r.checkForUpdates = e.target.checked;
+					persistence.flush();
+				}
+			});
+		});
 	});
 }
 
@@ -126,10 +143,15 @@ function displayOrgs() {
 	allOrgs.list(null, function (results) {
 		html = "";
 	    results.forEach(function (r) {
-			html += "<input type='checkbox'/>" + r.login + "</br>";
+			html += "<h4>" + r.login + "</h4></br>";
+			html += "<div id='org-" + r.login + "'></div>";
 	    });
 		$('#userOrgs').html(html);
 	});
+}
+
+function displayOrgRepos(org) {
+	
 }
 
 loadSettings();

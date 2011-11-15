@@ -3,7 +3,8 @@ persistence.store.websql.config(persistence, 'gitnotifydb', 'github-notifier-dat
 var Repository = persistence.define('Repository', {
   name: "TEXT",
   description: "TEXT",
-  url: "TEXT"
+  url: "TEXT",
+  checkForUpdates: "BOOL"
 });
 
 Repository.index(['name'],{unique:true});
@@ -29,6 +30,7 @@ function persistRepos(repos, org) {
 			org.repositories.add(repo);
 		}
 	}
+	persistence.flush();
 }
 
 function persistOrgs(orgs) {
@@ -37,4 +39,5 @@ function persistOrgs(orgs) {
 		org.login = orgs[i].login;
 		persistence.add(org);
 	}
+	persistence.flush();
 }
