@@ -4,7 +4,11 @@
 <script type="text/javascript" src="jquery-1.7.min.js"></script> 
 <script type="text/javascript" src="base64.js"></script> 
 <script src="oauth2/oauth2.js"></script>
+<script src="persistence.js" type="application/javascript"></script>
+<script src="persistence.store.sql.js" type="application/javascript"></script>
+<script src="persistence.store.websql.js" type="application/javascript"></script>
 <script type="text/javascript" src="common.js"></script>
+<script type="text/javascript" src="common-db.js"></script>
 <script>
 	$(document).ready(function() {
 		
@@ -25,6 +29,18 @@
 
 	function showPullRequests() {
 
+		var allPulls = PullRequest.all().order("number", true);
+
+		allPulls.list(null, function (results) {
+
+			html = "";
+		    results.forEach(function (r) {
+				html += "<a href='" + r.html_url + "'>" + r.title + "</a></br>";
+		    });
+			$('#pullRequestsDiv').html(html);
+
+		});
+		
 	}
 
 </script>

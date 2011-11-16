@@ -1,5 +1,16 @@
 persistence.store.websql.config(persistence, 'gitnotifydb', 'github-notifier-database', 5 * 1024 * 1024);
 
+var PullRequest = persistence.define('PullRequest', {
+  title: "TEXT",
+  body: "TEXT",
+  created: "TEXT",
+  updated: "TEXT",
+  number: "INT",
+  html_url: "TEXT"
+});
+
+PullRequest.index(['number'],{unique:true});
+
 var Repository = persistence.define('Repository', {
   name: "TEXT",
   description: "TEXT",
@@ -8,6 +19,7 @@ var Repository = persistence.define('Repository', {
 });
 
 Repository.index(['name'],{unique:true});
+Repository.hasMany('pullrequests', PullRequest, 'repository');
 
 var Organization = persistence.define('Organization', {
 	login: "TEXT"
@@ -38,6 +50,20 @@ function persistOrgs(orgs) {
 		var org = new Organization();
 		org.login = orgs[i].login;
 		persistence.add(org);
+	}
+	persistence.flush();
+}
+
+function persistPulls(pulls) {
+	for (i in pulls) {
+		var pull = new PullRequest();
+		pull.title = pulls[i].title;
+		pull.body = pulls[i].body;
+		pull.created = pulls[i].created_at;
+		pull.updated = pulls[i].updated_at;
+		pull.number = pulls[i].number;
+		pull.html_url = pulls[i].html_url;
+		persistence.add(pull);
 	}
 	persistence.flush();
 }
