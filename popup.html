@@ -38,7 +38,10 @@
 				html += "<a href='" + r.html_url + "'>" + r.title + "</a></br>";
 		    });
 			$('#pullRequestsDiv').html(html);
-
+			$("a").click(function(e) {
+				chrome.tabs.create({'url': e.target.href}, function(tab) {});
+				window.close();
+			});
 		});
 		
 	}
