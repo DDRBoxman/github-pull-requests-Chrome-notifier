@@ -36,7 +36,7 @@
 
 			allRepos.list(null, function (results) {
 				results.forEach(function (r) {
-					fetchPullRequest(accessToken, "DDRBoxman", r.name, function (data) {
+					fetchPullRequest(accessToken, provider.get('username'), r.name, function (data) {
 						persistPulls(res);
 					});
 				});
