@@ -5,6 +5,16 @@ var github = new OAuth2('github', {
     client_secret: 'aae37febed42b7e254519e858703b4ed5b4d8a29',
   });
 
+function fetchPullRequest(accesstoken, owner, repo, callback) {
+	$.ajax({
+		url: GITAPIROOT + '/repos/' + org + '/' + repo + '/pulls' + '?access_token=' + accessToken,
+		success: function(res) {
+			callback(res);
+		}
+	});
+	
+}
+
 function fetchPullRequests(accesstoken, callback) {
 	$.ajax({
 		url: GITAPIROOT + '/repos/Uncodin/nowtu-android/pulls' + '?access_token=' + accessToken,

@@ -26,9 +26,20 @@
 			chrome.browserAction.setBadgeBackgroundColor({color:[0, 0, 255, 100]});
 			
 			accessToken = provider.get('accessToken');
-			fetchPullRequests(accessToken, function(res) {
+			/*fetchPullRequests(accessToken, function(res) {
 				chrome.browserAction.setBadgeText({text:String(res.length)});
 				persistPulls(res);
+			});*/
+
+
+			var allRepos = Repository.all().filter("checkForUpdates", '=', true ).order("name", true);
+
+			allRepos.list(null, function (results) {
+				results.forEach(function (r) {
+					fetchPullRequest(accessToken, "DDRBoxman", r.name, function (data) {
+						persistPulls(res);
+					});
+				});
 			});
 		}
 		else {
