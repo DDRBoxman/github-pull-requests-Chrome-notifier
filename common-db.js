@@ -6,27 +6,17 @@ db.transaction(function (tx) {
 });
 
 
-function persistRepos(repos, org) {
-	for (i in repos) {
-		repo.name = repos[i].name;
-		repo.description = repos[i].description;
-		repo.url = repos[i].url;
-	}
+function persistRepos(repos) {
+	
+	db.transaction(function (tx) {
+		for (i in repos) {
+			name = repos[i].name;
+			description = repos[i].description;
+			url = repos[i].url;
+			owner = repos[i].owner.login;
+
+			tx.executeSql('INSERT INTO repos (name, owner) VALUES (?,?)',[name, owner]);
+		}
+	});
 }
 
-function persistOrgs(orgs) {
-	for (i in orgs) {
-		org.login = orgs[i].login;
-	}
-}
-
-function persistPulls(pulls) {
-	for (i in pulls) {
-		pull.title = pulls[i].title;
-		pull.body = pulls[i].body;
-		pull.created = pulls[i].created_at;
-		pull.updated = pulls[i].updated_at;
-		pull.number = pulls[i].number;
-		pull.html_url = pulls[i].html_url;
-	}
-}
