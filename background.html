@@ -3,9 +3,6 @@
 <script type="text/javascript" src="jquery-1.7.min.js"></script> 
 <script type="text/javascript" src="base64.js"></script> 
 <script src="oauth2/oauth2.js"></script>
-<script src="persistence.js" type="application/javascript"></script>
-<script src="persistence.store.sql.js" type="application/javascript"></script>
-<script src="persistence.store.websql.js" type="application/javascript"></script>
 <script type="text/javascript" src="common.js"></script>
 <script type="text/javascript" src="common-db.js"></script>
 <script>
@@ -32,13 +29,18 @@
 			});*/
 
 
-			var allRepos = Repository.all().filter("checkForUpdates", '=', true ).order("name", true);
+			db.transaction(function (tx) {
+				tx.executeSql('SELECT * FROM repos WHERE checkForPulls = "true"', [], function(tx, rs) {
+					for (var i=0; i<rs.rows.length; i++) {
+						r = rs.rows.item(i);
 
-			allRepos.list(null, function (results) {
-				results.forEach(function (r) {
-					fetchPullRequest(accessToken, provider.get('username'), r.name, function (data) {
-						persistPulls(res);
-					});
+						owner = r.owner;
+						repo = r.name;
+
+						fetchPullRequest(accessToken, owner, repo, function (data) {
+							persistPulls(data);
+						});
+					}
 				});
 			});
 		}

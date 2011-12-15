@@ -7,7 +7,7 @@ var github = new OAuth2('github', {
 
 function fetchPullRequest(accesstoken, owner, repo, callback) {
 	$.ajax({
-		url: GITAPIROOT + '/repos/' + org + '/' + repo + '/pulls' + '?access_token=' + accessToken,
+		url: GITAPIROOT + '/repos/' + owner + '/' + repo + '/pulls' + '?access_token=' + accessToken,
 		success: function(res) {
 			callback(res);
 		}
