@@ -5,6 +5,14 @@ db.transaction(function (tx) {
 	tx.executeSql('CREATE TABLE IF NOT EXISTS pullrequests (ID INTEGER PRIMART KEY ASC, title TEXT, body TEXT, created DATETIME, updated DATETIME, number INT UNIQUE, htmlUrl TEXT)');
 });
 
+function getNumPulls(callback) {
+	db.transaction(function (tx) {
+		tx.executeSql('SELECT * FROM pullRequests', [], function(tx, rs) {
+			callback(rs.rows.length);
+		});
+	});
+}
+
 function persistPulls(pulls) {
 	db.transaction(function (tx) {
 		for (i in pulls) {

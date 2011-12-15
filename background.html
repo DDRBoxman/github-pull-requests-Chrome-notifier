@@ -1,5 +1,6 @@
 <html>
 <head>
+<script type="text/javascript" src="async.min.js"></script>
 <script type="text/javascript" src="jquery-1.7.min.js"></script> 
 <script type="text/javascript" src="base64.js"></script> 
 <script src="oauth2/oauth2.js"></script>
@@ -39,6 +40,10 @@
 
 						fetchPullRequest(accessToken, owner, repo, function (data) {
 							persistPulls(data);
+
+							getNumPulls(function(num) {
+								chrome.browserAction.setBadgeText({text:num + ''});
+							});
 						});
 					}
 				});
