@@ -1,5 +1,5 @@
 <head>
-<title>OAuth 2.0 Options</title>
+<title>GitHub Pull Request Notifier Options</title>
 <LINK REL=StyleSheet HREF="style.css" TYPE="text/css">
 <script src="oauth2/oauth2.js"></script>
 <script type="text/javascript" src="jquery-1.7.min.js"></script> 
@@ -102,11 +102,11 @@ function displayRepos() {
 
 				r = rs.rows.item(i);
 
-				html += "<input class='repoBox' type='checkbox' name='" + r.ID + "'";
+				html += "<div class=\"repo\"><label><input class='repoBox' type='checkbox' name='" + r.ID + "'";
 				if (r.checkForPulls) {
 					html += "checked";
 				}
-				html += "/>" + r.name + "</br>";
+				html += "/>" + r.name + "</label></div>";
 
 			}
 
