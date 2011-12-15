@@ -83,8 +83,6 @@ function checkAuthorized() {
     	});
     	
     	fetchUserOrgs(accessToken, function (res) {
-    		persistOrgs(res);
-    		setOrgRepos();
     	});
 	
       button.classList.add('authorized');
@@ -116,6 +114,7 @@ function displayRepos() {
 			
 			$(".repoBox").change(function(e) {
 				console.log(e.target.name + " - " + e.target.checked);
+				setRepoCheck(e.target.name, e.target.checked);
 				});
 			});
 		});

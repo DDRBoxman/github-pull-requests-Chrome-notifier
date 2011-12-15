@@ -1,7 +1,7 @@
 var db = openDatabase('mydb', '1.0', 'Github database', 2 * 1024 * 1024);
 
 db.transaction(function (tx) {
-	tx.executeSql('CREATE TABLE IF NOT EXISTS repos (ID INTEGER PRIMARY KEY ASC, name TEXT, owner TEXT, description TEXT, checkForPulls BOOL)');
+	tx.executeSql('CREATE TABLE IF NOT EXISTS repos (ID INTEGER PRIMARY KEY ASC, name TEXT UNIQUE, owner TEXT, description TEXT, checkForPulls BOOL)');
 	tx.executeSql('CREATE TABLE IF NOT EXISTS pullrequests (ID INTEGER PRIMART KEY ASC, title TEXT, body TEXT, created DATETIME, updated DATETIME, number INT, htmlUrl TEXT)');
 });
 
@@ -15,8 +15,13 @@ function persistRepos(repos) {
 			url = repos[i].url;
 			owner = repos[i].owner.login;
 
-			tx.executeSql('INSERT INTO repos (name, owner) VALUES (?,?)',[name, owner]);
+			tx.executeSql('INSERT OR IGNORE INTO repos (name, owner) VALUES (?,?)',[name, owner]);
 		}
 	});
 }
 
+function setRepoCheck(repoId, check) {
+	db.transaction(function(tx) {
+		tx.executeSql('UPDATE repos SET checkForPulls = ? WHERE ID = ?', [check, repoId]);
+	});
+}
