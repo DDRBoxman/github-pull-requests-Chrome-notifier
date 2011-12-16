@@ -11,11 +11,12 @@ body {
 .repoSection {
 	margin-top: 10px;
 	padding-left: 10px; 
+	padding-bottom: 10px;
 	border-color : #CCC;
 	border-style: solid;
 	border-width: 1px;
 	border-color: #CCC;
-	max-height: 35%;
+	max-height: 65%;
 	overflow: auto;
 }
 
