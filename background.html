@@ -37,6 +37,8 @@
 						repoArray.push(rs.rows.item(i));
 					}
 
+					deletePulls();
+
 					async.forEach(repoArray, 
 						function(item, call) {
 

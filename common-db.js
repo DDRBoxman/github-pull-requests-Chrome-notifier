@@ -13,6 +13,12 @@ function getNumPulls(callback) {
 	});
 }
 
+function deletePulls() {
+	db.transaction(function (tx) {
+		tx.executeSql('DELETE FROM pullrequests');
+	});
+}
+
 function persistPulls(pulls) {
 	db.transaction(function (tx) {
 		for (i in pulls) {
