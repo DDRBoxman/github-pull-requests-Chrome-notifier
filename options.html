@@ -13,23 +13,24 @@
 </head>
 
 <body>
+	<div class="preferences">	
+		<h1>Preferences</h1>
+		<input type="checkbox" id="showOnlyOthersCheckbox"/><label for="showMine">Only show pull requests made by others.</label>
 	
-	<h1>Preferences</h1>
-	<input type="checkbox" id="showOnlyOthersCheckbox"/><label for="showMine">Only show pull requests made by others.</label>
-	
-  <h1>OAuth 2.0 Permissions</h1>
-  <button id="github" onclick="javascript:authorize('github')">
-    Grant Github Access
-  </button>
-  <button id="clear" onclick="javascript:clearAuthorized()">Clear Tokens</button>
+		<h1>OAuth 2.0 Permissions</h1>
+		<button id="github" onclick="javascript:authorize('github')">
+		Grant Github Access
+		</button>
+		<button id="clear" onclick="javascript:clearAuthorized()">Clear Tokens</button>
 
-  <div class="repoSection">
-	  <div class="repoSectionTitle">
-	  </div>
-	  <div id="userRepoList">
-	  	
-	  </div>
-  </div>
+	</div>
+
+	<div class="repoSection">
+		<div class="repoSectionTitle">
+		</div>
+		<div id="userRepoList">
+		</div>
+	</div>
 <script>
 
 var repolist;

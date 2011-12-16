@@ -8,15 +8,16 @@ body {
 	width: 500px;
 }
 
+.preferences {
+	float:left;
+	margin-right:15px;
+}
+
 .repoSection {
-	margin-top: 10px;
-	padding: 10px; 
-	border-color : #CCC;
-	border-style: solid;
-	border-width: 1px;
-	border-color: #CCC;
-	max-height: 65%;
-	overflow: auto;
+	float: left;
+	overflow:auto;
+	height: 100%;
+	min-width: 500px;
 }
 
 .repoSection div.owner {
@@ -26,6 +27,7 @@ body {
 	border-style: solid;
 	margin-top: 5px;
 	margin-bottom: 5px;
+	width:450px;
 }
 
 .repoSection div.owner div.body {
