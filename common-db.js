@@ -1,7 +1,8 @@
 var db = openDatabase('mydb', '1.0', 'Github database', 2 * 1024 * 1024);
 
 db.transaction(function (tx) {
-	tx.executeSql('CREATE TABLE IF NOT EXISTS repos (ID INTEGER ASC, name TEXT, owner TEXT, description TEXT, checkForPulls BOOL, PRIMARY KEY (name, owner))');
+	tx.executeSql('CREATE TABLE IF NOT EXISTS repos (ID INTEGER DEFAULT (1), name TEXT, owner TEXT, description TEXT, checkForPulls BOOL, PRIMARY KEY (name, owner))');
+	tx.executeSql('CREATE TRIGGER repo_increment AFTER INSERT ON repos BEGIN UPDATE repos SET ID=(SELECT MAX(ID) FROM repos)+1 WHERE owner = new.owner AND name = new.name; END');
 	tx.executeSql('CREATE TABLE IF NOT EXISTS pullrequests (ID INTEGER PRIMART KEY ASC, title TEXT, body TEXT, created DATETIME, updated DATETIME, number INT UNIQUE, htmlUrl TEXT)');
 });
 
