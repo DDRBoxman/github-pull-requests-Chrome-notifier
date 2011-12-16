@@ -108,13 +108,21 @@ function displayRepos() {
 			
 			html = "";
 			var displayedOwner = "";
+			var openDiv = false;
 			for (var i=0; i < rs.rows.length; i++) {
 
 				r = rs.rows.item(i);
 
 				if (displayedOwner != r.owner) {
 					displayedOwner = r.owner;
+					if (openDiv) {
+						html += "</div></div>";	
+					} else {
+						openDiv = true;
+					}
+					html += '<div class="owner">';
 					html += "<h3>" + displayedOwner  + "</h3>";
+					html += '<div class="body">';
 				}
 
 				html += "<div class=\"repo\"><label><input class='repoBox' type='checkbox' name='" + r.ID + "'";
@@ -124,6 +132,8 @@ function displayRepos() {
 				html += "/>"  + r.name + "</label></div>";
 
 			}
+
+			html += '</div></div>';
 
 			$('#userRepoList').html(html);
 			
