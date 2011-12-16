@@ -25,7 +25,6 @@
 
   <div class="repoSection">
 	  <div class="repoSectionTitle">
-			<h3>My Repos</h3>
 	  </div>
 	  <div id="userRepoList">
 	  	
@@ -108,15 +107,21 @@ function displayRepos() {
 		tx.executeSql('SELECT * FROM repos ORDER BY LOWER(owner), LOWER(name)', [], function(tx, rs) {
 			
 			html = "";
+			var displayedOwner = "";
 			for (var i=0; i < rs.rows.length; i++) {
 
 				r = rs.rows.item(i);
+
+				if (displayedOwner != r.owner) {
+					displayedOwner = r.owner;
+					html += "<h3>" + displayedOwner  + "</h3>";
+				}
 
 				html += "<div class=\"repo\"><label><input class='repoBox' type='checkbox' name='" + r.ID + "'";
 				if (r.checkForPulls) {
 					html += "checked";
 				}
-				html += "/>" + r.owner + '/'  + r.name + "</label></div>";
+				html += "/>"  + r.name + "</label></div>";
 
 			}
 
