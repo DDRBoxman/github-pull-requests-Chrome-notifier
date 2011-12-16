@@ -1,6 +1,7 @@
 <head>
 <title>GitHub Pull Request Notifier Options</title>
 <LINK REL=StyleSheet HREF="style.css" TYPE="text/css">
+<script type="text/javascript" src="async.min.js"></script>
 <script src="oauth2/oauth2.js"></script>
 <script type="text/javascript" src="jquery-1.7.min.js"></script> 
 <script type="text/javascript" src="common.js"></script>
@@ -83,6 +84,23 @@ function checkAuthorized() {
     	});
     	
     	fetchUserOrgs(accessToken, function (res) {
+		async.forEach(res,
+			function(item, call) {
+				org = item.login;
+				fetchOrgRepos(accessToken, org, function(res) {
+					persistRepos(res);
+					call();	
+				});
+			},
+			function (err) {
+				if (err != undefined) {
+					console.log('org repo fetch failed');
+				}
+				else {
+					displayRepos();
+				}
+			}
+		);
     	});
 	
       button.classList.add('authorized');
