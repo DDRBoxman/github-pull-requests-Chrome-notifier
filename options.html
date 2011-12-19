@@ -127,7 +127,7 @@ function displayRepos() {
 				}
 
 				html += "<div class=\"repo\"><label><input class='repoBox' type='checkbox' name='" + r.ID + "'";
-				if (r.checkForPulls) {
+				if (r.checkForPulls == "true") {
 					html += "checked";
 				}
 				html += "/>"  + r.name + "</label></div>";
