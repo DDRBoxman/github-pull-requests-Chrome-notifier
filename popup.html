@@ -25,28 +25,32 @@
 	});
 
 	function showPullRequests() {
-
-
 			html = "";
+
 			db.transaction(function (tx) {
 				tx.executeSql("SELECT * FROM pullRequests", [], function(tx, rs) {
 					for (var i=0; i<rs.rows.length; i++) {
 						r = rs.rows.item(i);
 						html += "<a href='" + r.htmlUrl + "'>" + r.title + "</a></br>";
 					}	
+
+					if (html == "") {
+						html += "<h4>No outstanding pull requests</h4><h5>Maybe go write some code? :)</h5>";
+					}
+
 					$('#pullRequestsDiv').html(html);
+
 					$("a").click(function(e) {
 						chrome.tabs.create({'url': e.target.href}, function(tab) {});
 						window.close();
 					});
-			}	);
+				});
 			});
-		
 	}
 
 </script>
 </head>
-<body>
+<body id="popup">
 	<div id="pullRequestsDiv">
 
 	</div>
