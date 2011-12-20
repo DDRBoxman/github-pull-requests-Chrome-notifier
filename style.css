@@ -4,8 +4,11 @@ body {
 	line-height: 1.4;
 }
 
+body#popup {
+	min-width: 250px;
+}
+
 #pullRequestsDiv {
-	width: 500px;
 }
 
 .preferences {
