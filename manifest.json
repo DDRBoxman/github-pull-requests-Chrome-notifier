@@ -1,6 +1,6 @@
 {
   "name": "Github Pull Request Notifier",
-  "version": "1.0",
+  "version": "1.4",
   "description": "Polls the github API and notifies you when repos that you specify have a pending pull request.",
 	"icons": { "16": "icon16.png",
            "48": "icon48.png",
