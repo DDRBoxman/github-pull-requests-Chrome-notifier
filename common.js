@@ -10,21 +10,13 @@ function fetchPullRequest(accesstoken, owner, repo, callback) {
 		url: GITAPIROOT + '/repos/' + owner + '/' + repo + '/pulls' + '?access_token=' + accessToken,
 		success: function(res) {
 			callback(res);
+		},
+		failure: function(res) {
+			callabck(res);
 		}
 	});
 	
 }
-
-function fetchPullRequests(accesstoken, callback) {
-	$.ajax({
-		url: GITAPIROOT + '/repos/Uncodin/nowtu-android/pulls' + '?access_token=' + accessToken,
-		success: function(res){
-			localStorage.setItem("pullRequests", JSON.stringify(res));
-			callback(res);
-		}
-	});
-}
-
 
 function fetchUserRepos(accessToken, callback) {
 	$.ajax({
